@@ -1,0 +1,10 @@
+#!/bin/bash -e
+(
+  echo 'backend-dev: ensure reflex' >&2
+  go get github.com/cespare/reflex
+)
+(
+  echo 'backend-dev: run and watch' >&2
+  cd ./backend
+  reflex --start-service --regex='\.go$' -- bash -c 'rm -f ./backend && go get . && go build && ./backend'
+)

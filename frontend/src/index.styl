@@ -1,0 +1,59 @@
+@import 'common/palette'
+
+body
+  font-family "Helvetica"
+  padding 0 1.2rem 0
+  background palette('Blue Grey', '100')
+  color palette('Blue Grey', '900')
+  margin 0
+
+button
+  color palette('Blue Grey', '900')
+
+header
+  margin-top 1rem
+  border-bottom palette('Blue Grey', '900') solid 1px
+
+h1
+  font-size 3rem
+  margin 0
+  display inline-block
+h1>a
+  text-decoration none
+
+.col
+  display inline-block
+  vertical-align top
+  margin-right 2rem
+
+.app-state-paused, .app-state-paused>button
+  background palette('Grey', '700')
+
+.app-state-running, .app-state-running>button
+  background palette('Green', '700')
+
+button#btn-pause
+  font-size 2rem
+  margin 0.5rem
+  cursor pointer
+
+footer
+  border-top palette('Blue Grey', '900') solid 1px
+
+h3
+  font-weight 300
+
+ol
+  list-style-type none
+
+.text-value
+  color palette('Green', '900')
+
+.pos-rel
+  position relative
+
+.big-fat-warning
+  font-size 2rem
+  background palette('Red', '700')
+  padding 1rem
+  border 0.3rem inset palette('Blue Grey', '900')

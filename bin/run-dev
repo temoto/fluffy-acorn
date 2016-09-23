@@ -1,0 +1,14 @@
+#!/bin/bash -e
+cd "$( dirname "${BASH_SOURCE[0]}" )/.."
+
+echo 'Starting development servers.' >&2
+bin/frontend-dev & frontend_pid=$!
+bin/backend-dev & backend_pid=$!
+function stop() {
+  echo 'Interrupted. Killing subtasks.' >&2
+  kill $frontend_pid || echo ' - invalid frontend dev server process' >&2
+  kill $backend_pid || echo ' - invalid backend dev server process' >&2
+}
+trap stop SIGINT SIGHUP
+wait $frontend_pid
+wait $backend_pid

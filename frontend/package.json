@@ -1,0 +1,44 @@
+{
+  "name": "fluffy_acorn",
+  "description": "(stub)",
+  "repository": "(stub)",
+  "version": "0.0.1",
+  "license": "MIT",
+  "aliasify": {
+    "aliases": {
+      "ractive": "ractive/build/ractive.runtime"
+    }
+  },
+  "browserify-shim": {
+    "Zepto": "$"
+  },
+  "devDependencies": {
+    "aliasify": "^2.0.0",
+    "browser-sync": "^2.16.0",
+    "browserify": "^13.1.0",
+    "coffeeify": "^2.0.1",
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-changed": "^1.3.2",
+    "gulp-connect": "^5.0.0",
+    "gulp-jade": "^1.1.0",
+    "gulp-notify": "^2.2.0",
+    "gulp-open": "^2.0.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-stylus": "^2.5.0",
+    "gulp-util": "^3.0.7",
+    "jadeify": "^4.6.0",
+    "moment": "^2.15.1",
+    "pretty-hrtime": "^1.0.2",
+    "ractiveify": "^1.5.6",
+    "vinyl-source-stream": "^1.1.0",
+    "watchify": "^3.7.0"
+  },
+  "dependencies": {
+    "browserify-shim": "^3.8.12",
+    "ractive": "^0.7.3",
+    "socket.io": "^1.4.8",
+    "spin": "0.0.1",
+    "zepto": "^1.2.0"
+  }
+}
