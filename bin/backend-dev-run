@@ -1,0 +1,10 @@
+#!/bin/bash -e
+cd "$( dirname "${BASH_SOURCE[0]}" )/../backend"
+rm -f ./backend
+echo 'backend: build' >&2
+go get .
+go build
+echo 'backend: test' >&2
+go test -v ./...
+echo 'backend: run' >&2
+exec ./backend

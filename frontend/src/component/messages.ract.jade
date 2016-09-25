@@ -1,0 +1,17 @@
+messages.pos-rel
+  h2 Recent messages
+  table
+    thead
+      tr
+        th Contact
+        th Sender
+        th Message
+        th When
+    tbody#recent-messages-list
+      {{#each messages}}
+      tr
+        td: a(href="https://localbitcoins.com/request/online_sell_buyer/{{contact_id}}"): {{contact_id}}
+        td {{sender.name}}
+        td {{msg}}
+        td {{created_at.replace(/^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}):\d{2}.*/, '$1 $2')}}
+      {{/each}}

@@ -1,10 +1,13 @@
 #!/bin/bash -e
+cd "$( dirname "${BASH_SOURCE[0]}" )/.."
 (
+  set -e
   echo 'backend-dev: ensure reflex' >&2
   go get github.com/cespare/reflex
 )
 (
+  set -e
   echo 'backend-dev: run and watch' >&2
-  cd ./backend
-  reflex --start-service --regex='\.go$' -- bash -c 'rm -f ./backend && go get . && go build && ./backend'
+  cd backend
+  reflex --start-service --regex='\.go$' -- ../bin/backend-dev-run
 )

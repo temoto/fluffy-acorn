@@ -2,4 +2,3 @@
 cd "$( dirname "${BASH_SOURCE[0]}" )/../frontend"
 npm install
 gulp connect watch
-# grunt clean build

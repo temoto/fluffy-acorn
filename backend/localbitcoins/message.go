@@ -1,6 +1,7 @@
 package localbitcoins
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -23,12 +24,29 @@ type Message struct {
 	CreatedAt       time.Time `json:"-"`
 	IsAdmin         bool      `json:"is_admin"`
 	Msg             string    `json:"msg"`
-	Sender          struct {
-		FeedbackScore    int       `json:"feedback_score"`
-		Name             string    `json:"name"`
-		LastOnlineString string    `json:"last_online"`
-		LastOnline       time.Time `json:"-"`
-		TradeCount       string    `json:"trade_count"`
-		Username         string    `json:"username"`
-	} `json:"sender"`
+	Sender          ProfileT  `json:"sender"`
+}
+
+func (self *Api) ContactMessages(contactId int) (interface{}, error) {
+	var r interface{}
+	return r, self.RequestJson("GET", fmt.Sprintf("/api/contact_messages/%d/", contactId), "", false, &r)
+}
+
+type RecentMessagesResponse struct {
+	Data struct {
+		MessageList []Message `json:"message_list"`
+	} `json:"data"`
+	RetryAfter int `json:"retry_after"`
+}
+
+func (self *Api) RecentMessages() (*RecentMessagesResponse, error) {
+	r := new(RecentMessagesResponse)
+	// r.CheckInterval = 34.1
+	err := self.RequestJson("GET", "/api/recent_messages/", "", false, r)
+	return r, err
+}
+
+func (self *Api) ContactMessagePost(contactId int, msg string) (interface{}, error) {
+	var r interface{}
+	return r, self.RequestJson("POST", fmt.Sprintf("/api/contact_message_post/%d/", contactId), "", false, &r)
 }

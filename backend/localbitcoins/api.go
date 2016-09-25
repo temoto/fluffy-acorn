@@ -23,19 +23,23 @@ type Api struct {
 	secret    string
 }
 
-func (self *Api) Configure(url, key, secret string) {
+func (self *Api) Configure(url, socksAddr, key, secret string) {
 	if url == "" {
 		url = "https://localbitcoins.com"
 	}
 	self.urlPrefix = url
 	self.key = key
 	self.secret = secret
-	tr := &http.Transport{}
-	socks, err := proxy.SOCKS5("tcp", "127.0.0.1:1083", nil, proxy.Direct)
-	if err != nil {
-		panic(err)
+	tr := &http.Transport{
+		ResponseHeaderTimeout: 41 * time.Second,
 	}
-	tr.Dial = socks.Dial
+	if socksAddr != "" {
+		socks, err := proxy.SOCKS5("tcp", socksAddr, nil, proxy.Direct)
+		if err != nil {
+			panic(err)
+		}
+		tr.Dial = socks.Dial
+	}
 	self.c = &http.Client{Transport: tr}
 }
 
@@ -68,9 +72,12 @@ func (self *Api) RequestJson(method, path, params string, public bool, result in
 	if err != nil {
 		return err
 	}
-	log.Printf("localbitcoins.RequestJson: url=%s", req.URL.String())
+	log.Printf("localbitcoins.RequestJson: method=%s path=%s begin url=%s", method, path, req.URL.String())
 
+	t1 := time.Now()
 	resp, err := self.c.Do(req)
+	td := time.Since(t1)
+	log.Printf("localbitcoins.RequestJson: method=%s path=%s time=%s error=%v", method, path, td, err)
 	if err != nil {
 		return err
 	}
@@ -80,57 +87,9 @@ func (self *Api) RequestJson(method, path, params string, public bool, result in
 	return err
 }
 
-func (self *Api) Ads() (interface{}, error) {
-	var r interface{}
-	return r, self.RequestJson("GET", "/api/ads/", "", false, &r)
-}
-
-func (self *Api) AdGet([]int) (interface{}, error) {
-	var r interface{}
-	return r, self.RequestJson("GET", "/api/ad-get/", "", false, &r)
-}
-
-func (self *Api) AdEdit(id int) (interface{}, error) {
-	var r interface{}
-	return r, self.RequestJson("POST", fmt.Sprintf("/api/ad/%d/", id), "", false, &r)
-}
-
-func (self *Api) AdCreate() (interface{}, error) {
-	var r interface{}
-	return r, self.RequestJson("POST", "/api/ad-create/", "", false, &r)
-}
-
-func (self *Api) AdDelete(id int) (interface{}, error) {
-	var r interface{}
-	return r, self.RequestJson("POST", fmt.Sprintf("/api/ad-delete/%d/", id), "", false, &r)
-}
-
 func (self *Api) Dashboard() (interface{}, error) {
 	var r interface{}
 	return r, self.RequestJson("GET", "/api/dashboard/", "", false, &r)
-}
-
-func (self *Api) ContactMessages(contactId int) (interface{}, error) {
-	var r interface{}
-	return r, self.RequestJson("GET", fmt.Sprintf("/api/contact_messages/%d/", contactId), "", false, &r)
-}
-
-func (self *Api) RecentMessages() (interface{}, error) {
-	type RT struct {
-		Data struct {
-			MessageCount  int       `json:"message_count"`
-			MessageList   []Message `json:"message_list"`
-			CheckInterval float32   `json:"check_interval"`
-		} `json:"data"`
-	}
-	var r RT
-	// r.Data.CheckInterval = 34.1
-	return &r.Data, self.RequestJson("GET", "/api/recent_messages/", "", false, &r)
-}
-
-func (self *Api) ContactMessagePost(contactId int, msg string) (interface{}, error) {
-	var r interface{}
-	return r, self.RequestJson("POST", fmt.Sprintf("/api/contact_message_post/%d/", contactId), "", false, &r)
 }
 
 func (self *Api) Feedback(username, feedback string) (interface{}, error) {
@@ -138,7 +97,12 @@ func (self *Api) Feedback(username, feedback string) (interface{}, error) {
 	return r, self.RequestJson("POST", fmt.Sprintf("/api/feedback/%s/", username), "", false, &r)
 }
 
-func (self *Api) PublicAdsOnlineBuy(currency string) (interface{}, error) {
-	var r interface{}
-	return r, self.RequestJson("GET", fmt.Sprintf("/buy-bitcoins-online/%s/.json", currency), "", true, &r)
+// TODO sort this out
+type ProfileT struct {
+	FeedbackScore    int       `json:"feedback_score"`
+	Name             string    `json:"name"`
+	LastOnlineString string    `json:"last_online"`
+	LastOnline       time.Time `json:"-"`
+	TradeCount       string    `json:"trade_count"`
+	Username         string    `json:"username"`
 }

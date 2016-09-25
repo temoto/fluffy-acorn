@@ -7,7 +7,7 @@ html
     title #{title}
     link(rel="stylesheet" href="/index.css")
     link(rel="preload" href="/common/fluffy-acorn-x64.png" as="image")
-    link(rel="preload" href="/bundle.js" as="script")
+    link(rel="preload" href="/index.js" as="script")
     link(rel="icon" href="/common/fluffy-acorn-x64.png")
     style #msg-invalid-browser{display:none}
   body
@@ -49,20 +49,12 @@ html
             th Actions
         tbody#current-ads-list
 
-    div#recent-messages.pos-rel
-      h2 Recent messages
-      table
-        thead
-          tr
-            th Contact
-            th Sender
-            th Message
-            th When
-        tbody#recent-messages-list
+    div#recent-messages-cont
 
     footer
       p #{title} version: #[span.text-value #{version}] frontend compiled at: #[span.text-value #{new Date().toISOString()}] env: #[span.text-value #{environment}]
 
     script(src="/zepto.min.js")
+    script(src="/mousetrap.min.js")
     script window.acorn=window.acorn||{}
-    script(src="/bundle.js")
+    script(src="/index.js")
